@@ -22,8 +22,8 @@ class UI:
         while True:
             try:
                 limit = int(input("Ingrese el número de registros a consultar: "))
-                if limit <= 0:
-                    raise ValueError("El número de registros debe ser un número positivo.")
+                if limit <= 0 or limit>=1000:
+                    raise ValueError("El número de registros debe ser un número positivo y menor a 1000 registros.")
                 break
             except ValueError as e:
                 print(f"Entrada inválida: {e}. Intente de nuevo.")
