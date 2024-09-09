@@ -1,0 +1,270 @@
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+ 
+\documentclass[12pt]{article}
+ 
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage[spanish]{babel} %Castellanización
+\usepackage[T1]{fontenc} %escribe lo del teclado
+\usepackage[utf8]{inputenc} %Reconoce algunos símbolos
+\usepackage{lmodern} %optimiza algunas fuentes
+\usepackage{graphicx}
+\graphicspath{ {images/} }
+\usepackage{hyperref} % Uso de links
+\usepackage[most]{tcolorbox}
+ 
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+ 
+\newenvironment{theorem}[2][Theorem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemma]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{exercise}[2][Exercise]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{question}[2][Pregunta]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Corollary]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\newenvironment{solution}{\begin{proof}[Solución]}{\end{proof}} %It just adds Proof in italics at the beginning of the text given as argument and a white square (Q.E.D. symbol, also known as a tombstone) at the end of it.
+\renewcommand{\qedsymbol}{} % To hide the Q.E.D. symbol altogether, redefine it to be blank:
+
+
+
+
+
+
+%--------------------PARAMETRIZA APARIENCIA DE CODIGO FUENTE ------------------------------------
+\usepackage{listings}
+\usepackage{xcolor}
+%New colors defined below
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+%Code listing style named "mystyle"
+\lstdefinestyle{mystyle}{
+  backgroundcolor=\color{backcolour},   commentstyle=\color{codegreen},
+  keywordstyle=\color{magenta},
+  numberstyle=\tiny\color{codegray},
+  stringstyle=\color{codepurple},
+  basicstyle=\ttfamily\footnotesize,
+  breakatwhitespace=true,         
+  breaklines=true,                 
+  captionpos=b,                    
+  keepspaces=true,                 
+  numbers=left,                    
+  numbersep=5pt,                  
+  showspaces=false,                
+  showstringspaces=false,
+  showtabs=false,                  
+  tabsize=2
+}
+
+\lstset{style=mystyle}
+
+
+%------------------------------------------------------------------------------------------------
+
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    %filecolor=blue,      
+    urlcolor=blue,
+}
+ 
+ 
+\begin{document}
+ 
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------
+ 
+\title{Proyecto Fundamentos Básicos de Python - Programación 4}
+\author{Nombre Alumno: Santiago Gonzalez Hincapíe\\ %replace with your name
+Docente: Alejandro Rodas Vásquez\\
+Universidad Tecnológica de Pereira}
+
+\maketitle
+
+\section*{Introducción}
+En este proyecto usted pondrá en práctica los conceptos básicos de programación hasta hora vistos (\textit{creación de funciones y módulos, divide y vencerás, abstracción de problemas, etc }). Se deberá consumir los recursos suministrados por una API suministrada por el portal Nacional de \href{https://www.datos.gov.co/}{Datos Abiertos}, específicamente el conjunto de datos \href{https://www.datos.gov.co/Agricultura-y-Desarrollo-Rural/Resultados-de-An-lisis-de-Laboratorio-Suelos-en-Co/ch4u-f3i5}{``Resultados de Análisis de Laboratorio Suelos en Colombia''}.\\
+
+
+La aplicación a construir será en escritorio y por línea de comandos y basada en módulos que permitirá al usuario consultar las propiedades edáficas (pH, Fósforo, Aluminio, Calcio, Potasio, Sodio, Zinc, etc) de alguno de los cultivos prioritarios del Departamento de Risaralda.\\
+
+
+\newpage
+
+
+
+A continuación, se encuentra el código fuente en Python que permite realiza dicha consulta. 
+
+\begin{lstlisting}[language=Python]
+#!/usr/bin/env python
+
+# make sure to install these packages before running:
+# pip install pandas
+# pip install sodapy
+
+import pandas as pd
+from sodapy import Socrata
+
+# Unauthenticated client only works with public data sets. Note 'None'
+# in place of application token, and no username or password:
+client = Socrata("www.datos.gov.co", None)
+
+# Example authenticated client (needed for non-public datasets):
+# client = Socrata(www.datos.gov.co,
+#                  MyAppToken,
+#                  username="user@example.com",
+#                  password="AFakePassword")
+
+# First 2000 results, returned as JSON from API / converted to Python list of
+# dictionaries by sodapy.
+results = client.get("ch4u-f3i5", limit=2000)
+
+# Convert to pandas DataFrame
+results_df = pd.DataFrame.from_records(results)
+\end{lstlisting}
+
+En las líneas 1 y 2 se hace la llamada a las librerías \textit{Pandas} y \textit{sodapy}. \textit{Pandas} es reconocida por ser empleada en \textit{Análisis de Datos}.\\
+
+Enlaces necesarios para utilizar el API:
+
+\begin{itemize}
+    \item \href{https://dev.socrata.com/foundry/www.datos.gov.co/ch4u-f3i5}{Documentación Socrata Analisis Suelos} 
+    \item \href{https://github.com/xmunoz/sodapy}{sodapy} \item \href{https://dev.socrata.com/docs/queries/}{Queries using SODA}
+\end{itemize}
+
+
+
+\section{Requerimientos Funcionales}
+\label{requerimientos_funcionales}
+
+Usted debe de crear una aplicación que le permita al usuario ingresar: 
+
+\begin{enumerate}
+    \item Departamento (\textit{departamento})
+    \item Municipio (\textit{municipio})
+    \item Cultivo (\textit{cultivo})
+    \item Número de Registros a consultar (\textit{limit}). Este parámetro es importante puesto que si selecciona un número grande e.j 1000 registros, la consulta puede ``colgarse''
+\end{enumerate}
+
+Y crear una tabla donde se visualice: 
+
+\begin{enumerate}
+    \item Departamento
+    \item Municipio 
+    \item Cultivo
+    \item Topología
+    \item La \textbf{mediana} de las variables edáficas (\textit{pH, Fósforo(P), Potasio(K)}) del cultivo consultado.
+\end{enumerate}
+
+
+\section{Requerimientos de la Arquitectura de Software}
+
+El software debe de estar construido aplicando el concepto de \textit{modularidad}. Cada módulo debe de tener una tarea en específico 
+
+
+\begin{itemize}
+\item Módulo para UI
+\item Módulo API
+\item Como archivo separado el \textit{main}
+\end{itemize}
+
+
+\section{Evidencias para la entrega}
+
+\begin{enumerate}
+    \item Usted debe de subir el código fuente a su repositorio invidual de  \href{https://github.com/}{github}. 
+    
+    \item Pantallazos donde se corrobore el funcionamiento del sofware (consultas realizadas y resultado obtenido) y se compruebe que los Requerimientos Funcionales (\autoref{requerimientos_funcionales}) han sido complidos.
+    
+    \item Para que esta actividad esté enmarcada dentro del contexto de la Arquitectura de Software y tengo un fundamento teórico válido. Usted debe de consultar ¿Qué es un Diagrama de Componentes? ¿Para qué se utiliza? ¿Qué es un componente?
+
+    \item Realizar una presentación donde exponga su proyecto al aula de clase.
+\end{enumerate}
+
+\begin{question}{1}
+¿Que es un diagrama de componentes?
+\end{question}
+\begin{solution}
+El Diagrama de Componentes es un tipo de diagrama en la notación UML (Lenguaje Unificado de Modelado) que representa la estructura física del software. En este diagrama, se visualizan los diferentes componentes del sistema, así como las relaciones entre ellos.
+\end{solution}
+\begin{question}{2}
+¿ Para qué se utiliza un diagrama de componentes?
+\end{question}
+\begin{solution}
+El Diagrama de Componentes se utiliza para mostrar cómo se organiza el software en términos de sus componentes y sus dependencias. Es útil en varias situaciones, como:
+\begin{itemize}
+    \item Diseño del software: Permite a los desarrolladores planificar cómo se dividirá la funcionalidad en diferentes módulos o componentes.
+    \item Documentación: Proporciona una representación visual clara de la arquitectura del software, lo que facilita la comprensión del sistema para otros desarrolladores o partes interesadas.
+    \item Mantenimiento: Ayuda a identificar cómo los diferentes componentes se interrelacionan, lo cual es valioso cuando se realizan cambios o actualizaciones en el sistema.
+\end{itemize}
+\end{solution}
+\begin{question}{3}
+¿ Que es un componente ?
+\end{question}
+\begin{solution}
+Un componente es una parte modular e independiente del sistema que encapsula un conjunto de funcionalidades o datos. Los componentes son bloques de construcción que se combinan para formar un sistema más grande. Cada componente interactúa con otros componentes a través de interfaces bien definidas, lo que permite modificar, actualizar o reemplazar componentes individuales sin afectar al resto del sistema.
+
+En resumen, los componentes se utilizan para:
+\begin{itemize}
+    \item Reutilización del código: Los componentes pueden ser reutilizados en diferentes partes de un sistema o incluso en diferentes proyectos.
+    \item Modularidad: Facilitan la separación de responsabilidades dentro del sistema, lo que resulta en un diseño más organizado y mantenible.
+    \item Facilidad de mantenimiento: Permiten realizar cambios en un componente sin afectar al resto del sistema, siempre y cuando se mantengan las interfaces.
+\end{itemize}
+\end{solution}
+
+\newpage
+\subsection{Estructura del Proyecto}
+
+A continuación, se muestra la arquitectura que debe de tener el software (\autoref{fig:arquitectura}). Sin embargo, en esta imagen solo se muestra la estructura base, se debe agregar los archivos Python que usted crea.
+
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics{arquitecturaRodas.jpg}
+    \caption{Estructura de la Arquitectura}
+    \label{fig:arquitectura}
+\end{figure}
+
+
+\subsection{Pantallazos}
+
+\begin{figure}[h]  
+    \centering
+    \includegraphics[width=0.5\textwidth]{api evidencia 1.jpg}  % Reemplaza 'nombre_de_la_imagen' por el nombre de tu archivo
+    \caption{Evidencia 1 de la estructura}
+    \label{fig:mi_imagen}
+\end{figure}
+
+\begin{figure}[h!]  
+    \centering
+    \includegraphics[width=0.8\textwidth]{api evidencia 2.jpg}  % Reemplaza 'nombre_de_la_imagen' por el nombre de tu archivo
+    \caption{Evidencia de recolección de datos y manejo de errores como las minusculas y mayusculas}
+    \label{fig:mi_imagen}
+\end{figure}
+
+\begin{figure}[t!]  
+    \centering
+    \includegraphics[width=1\textwidth]{api evidencia 3.jpg}  % Reemplaza 'nombre_de_la_imagen' por el nombre de tu archivo
+    \caption{Evidencia de la tabla en el resultado final al calcular las medianas}
+    \label{fig:mi_imagen}
+\end{figure}
+
+
+
+\end{document}
