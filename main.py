@@ -11,7 +11,7 @@ class MainApp:
         try:
             while True:
                 self.ui.mostrar_menu()
-                opcion = input("Seleccione una opción: ")
+                opcion = input("Seleccione la opción que desee: ")
 
                 if opcion == "1":
                     departamento, municipio, cultivo, limit = self.ui.obtener_entrada()
