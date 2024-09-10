@@ -1,5 +1,5 @@
 import pandas as pd
-from tabulate import tabulate
+from tabulate import tabulate # Para manejar nuestra final
 
 class UI:
     def mostrar_menu(self):
@@ -34,11 +34,10 @@ class UI:
         if isinstance(resultados, pd.DataFrame) and not resultados.empty:
             # Mostrar los resultados de la consulta:
             print("\nResultados de la consulta: ")
-            print(tabulate(resultados, headers='keys', tablefmt='grid', showindex=False))
+            #print(tabulate(resultados, headers='keys', tablefmt='grid', showindex=False))
 
             # Crear la tabla final combinando resultados y medianas
             tabla_final = self.crear_tabla_final(resultados, medianas)
-
             print("\nTabla con los resultados y las medianas:")
             print(tabulate(tabla_final, headers='keys', tablefmt='grid', showindex=False))
 

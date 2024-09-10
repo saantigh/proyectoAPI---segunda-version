@@ -1,6 +1,6 @@
 from api.api_module import APIClient
 from ui.ui_module import UI
-import logging
+import logging # libreria manejo de warnings o errores
 
 class MainApp:
     def __init__(self):
