@@ -36,15 +36,15 @@ class APIClient:
             return {}
         
         # Extraer valores especiales (como "<3.87")
-        valor_especial_ph = Data_frame['ph_agua_suelo_2_5_1_0'].apply(lambda x: x if isinstance(x, str) and '<' in x else None).dropna().unique()
-        valor_especial_fosforo = Data_frame['f_sforo_p_bray_ii_mg_kg'].apply(lambda x: x if isinstance(x, str) and '<' in x else None).dropna().unique()
-        valor_especial_potasio = Data_frame['potasio_k_intercambiable_cmol_kg'].apply(lambda x: x if isinstance(x, str) and '<' in x else None).dropna().unique()
+        valor_especial_ph = Data_frame['ph_agua_suelo_2_5_1_0'].apply(lambda valor_columna: valor_columna if isinstance(valor_columna, str) and '<' in valor_columna else None).dropna().unique()
+        valor_especial_fosforo = Data_frame['f_sforo_p_bray_ii_mg_kg'].apply(lambda valor_columna: valor_columna if isinstance(valor_columna, str) and '<' in valor_columna else None).dropna().unique()
+        valor_especial_potasio = Data_frame['potasio_k_intercambiable_cmol_kg'].apply(lambda valor_columna: valor_columna if isinstance(valor_columna, str) and '<' in valor_columna else None).dropna().unique()
 
 
         # Convertir columnas a numerico, solo las que no sean cadenas especiales para calcular la mediana
-        Data_frame['ph_agua_suelo_2_5_1_0'] = pd.to_numeric(Data_frame['ph_agua_suelo_2_5_1_0'].where(Data_frame['ph_agua_suelo_2_5_1_0'].apply(lambda x: not isinstance(x, str) or '<' not in x)), errors='coerce')
-        Data_frame['f_sforo_p_bray_ii_mg_kg'] = pd.to_numeric(Data_frame['f_sforo_p_bray_ii_mg_kg'].where(Data_frame['f_sforo_p_bray_ii_mg_kg'].apply(lambda x: not isinstance(x, str) or '<' not in x)), errors='coerce')
-        Data_frame['potasio_k_intercambiable_cmol_kg'] = pd.to_numeric(Data_frame['potasio_k_intercambiable_cmol_kg'].where(Data_frame['potasio_k_intercambiable_cmol_kg'].apply(lambda x: not isinstance(x, str) or '<' not in x)), errors='coerce')
+        Data_frame['ph_agua_suelo_2_5_1_0'] = pd.to_numeric(Data_frame['ph_agua_suelo_2_5_1_0'].where(Data_frame['ph_agua_suelo_2_5_1_0'].apply(lambda valor_columna: not isinstance(valor_columna, str) or '<' not in valor_columna)), errors='coerce')
+        Data_frame['f_sforo_p_bray_ii_mg_kg'] = pd.to_numeric(Data_frame['f_sforo_p_bray_ii_mg_kg'].where(Data_frame['f_sforo_p_bray_ii_mg_kg'].apply(lambda valor_columna: not isinstance(valor_columna, str) or '<' not in valor_columna)), errors='coerce')
+        Data_frame['potasio_k_intercambiable_cmol_kg'] = pd.to_numeric(Data_frame['potasio_k_intercambiable_cmol_kg'].where(Data_frame['potasio_k_intercambiable_cmol_kg'].apply(lambda valor_columna: not isinstance(valor_columna, str) or '<' not in valor_columna)), errors='coerce')
 
         
         # Calcular medianas ignorando NaN (que se descartan automáticamente)
